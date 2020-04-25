@@ -16,3 +16,6 @@ config :bank, BankWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :bank,
+  repository: Bank.Infra.MockRepository

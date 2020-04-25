@@ -19,8 +19,17 @@ defmodule BankWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", BankWeb do
-  #   pipe_through :api
-  # end
+  scope "/v1", BankWeb do
+    pipe_through :api
+
+    resources "/accounts", AccountController do
+      resources "/transactions", TransactionController
+    end
+  end
+
+  scope "/v1/reports", BankWeb, as: :reports do
+    pipe_through :api
+
+    resources "/accounts", ReportController
+  end
 end
