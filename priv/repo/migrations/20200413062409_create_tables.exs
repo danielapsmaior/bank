@@ -33,8 +33,8 @@ defmodule Bank.Repo.Migrations.CreateTables do
   end
 
   def down do
-  	drop table(:transactions)
-  	drop table(:accounts)
-  	TransactionType.drop_type()
+    drop table(:transactions)
+    drop table(:accounts)
+    TransactionType.drop_type()
   end
 end

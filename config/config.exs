@@ -30,6 +30,10 @@ config :bank,
   initial_amount: 1000,
   repository: Bank.Infra.PostgresDBRepository
 
+config :bank, Bank.Authentication.Guardian,
+  issuer: "bank",
+  secret_key: "cU8/3T7WAyHuIdyIW97GsOZCPD8qUi9a9s/Kpcji7CcINL96iYQCQ3EijIRSUuJh"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

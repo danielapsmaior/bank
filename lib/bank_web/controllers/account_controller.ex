@@ -13,9 +13,10 @@ defmodule BankWeb.AccountController do
   defp result({:ok, account_number}, conn),
     do: json(conn, "Account #{account_number} successfully created")
 
-  defp result({:error, error_message}, conn) do
+  defp result({:error, error}, conn) do
     conn
     |> put_status(422)
-    |> json("Error to create account: #{error_message}")
+    |> put_resp_content_type("application/json")
+    |> json(error)
   end
 end

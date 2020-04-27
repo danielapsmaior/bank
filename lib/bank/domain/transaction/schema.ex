@@ -23,7 +23,23 @@ defmodule Bank.Domain.Schema.Transaction do
     transaction
     |> cast(params, [:account_id, :type, :amount, :balance])
     |> validate_required([:account_id, :type, :amount, :balance])
+    |> validate_amount()
+    |> put_new_balance()
   end
+
+  defp validate_amount(%Ecto.Changeset{changes: %{type: :receive}} = changeset), do: changeset
+
+  defp validate_amount(%Ecto.Changeset{valid?: true, changes: %{amount: amount}} = changeset) do
+    change(changeset, amount: -1 * amount)
+  end
+
+  defp validate_amount(changeset), do: changeset
+
+  defp put_new_balance(
+         %Ecto.Changeset{valid?: true, changes: %{balance: balance, amount: amount}} = changeset
+       ) do
+    change(changeset, balance: balance + amount)
+  end
+
+  defp put_new_balance(changeset), do: changeset
 end
-
-

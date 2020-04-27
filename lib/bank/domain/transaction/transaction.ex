@@ -12,22 +12,31 @@ defmodule Bank.Domain.Transaction do
     |> response(account)
   end
 
-  def receive({:ok, %Account{} = account}, amount) do
-  	Logger.info("Transaction receive")
+  def create({:error, _} = error, _account), do: error
 
-  	%{type: :receive, account_id: account.id, amount: amount, balance: amount}
+  def receive({:ok, %Account{} = account}, amount) do
+    Logger.info("Transaction receive")
+
+    %{type: :receive, account_id: account.id, amount: amount, balance: amount}
     |> validate()
     |> create(account)
   end
 
   def receive({:error, _} = error, _), do: error
 
-  defp response({:ok, %Transaction{}}, %Account{} = account), do: {:ok, account}
+  defp response({:ok, %Transaction{} = transaction}, %Account{} = account), do: {:ok, account, transaction}
   defp response(_, _), do: {:error, "Error to save transaction"}
 
   def validate(fields) do
-  	%Transaction{}
+    %Transaction{}
     |> Transaction.validate(fields)
     |> Bank.ValidationHandler.parse_changeset_result()
+  end
+
+  def withdrawal(amount, %Account{} = account) do
+  	balance = @repository.get_balance(account.id)
+  	%{type: :withdrawal, account_id: account.id, amount: amount, balance: balance}
+    |> validate()
+    |> create(account)
   end
 end
