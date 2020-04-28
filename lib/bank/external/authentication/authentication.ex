@@ -1,15 +1,11 @@
 defmodule Bank.Authentication do
   alias Argon2
   alias Bank.Domain.Schema.Account
-  alias Bank.Repo
 
-  import Ecto.Query, only: [from: 2]
-
-  require Logger
+  @repository Application.fetch_env!(:bank, :repository)
 
   def authenticate_account(account_number, plain_text_password) do
-    from(acc in Account, where: acc.account_number == ^account_number)
-	|> Repo.one()
+    @repository.get_account_by_account_number(account_number)
 	|> verify_password(plain_text_password)
   end
 

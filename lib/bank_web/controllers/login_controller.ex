@@ -1,10 +1,11 @@
 defmodule BankWeb.LoginController do
   use BankWeb, :controller
 
+  alias Bank.Authentication
   alias Bank.Authentication.Guardian
 
   def login(conn, %{"account_number" => account_number, "password" => password}) do
-  	Bank.Authentication.authenticate_account(account_number, password)
+  	Authentication.authenticate_account(account_number, password)
   	|> login_reply(conn)
   end
 

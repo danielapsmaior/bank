@@ -47,6 +47,7 @@ defmodule BankWeb.Router do
     pipe_through [:api, :auth, :ensure_auth]
 
     post "/withdraw", TransactionController, :withdraw
+    post "/transfer", TransactionController, :transfer
 
     resources "/accounts", AccountController, except: [:create] do
       resources "/transactions", TransactionController

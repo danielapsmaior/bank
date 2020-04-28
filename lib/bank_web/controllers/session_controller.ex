@@ -1,11 +1,10 @@
 defmodule BankWeb.SessionController do
   use BankWeb, :controller
 
-  alias Bank.Domain.Account, as: AccountUseCases
   alias Bank.{Authentication, Domain.Schema.Account, Authentication.Guardian}
 
   def new(conn, _) do
-    changeset = AccountUseCases.change_account(%Account{})
+    changeset = Account.validate(%Account{}, %{})
     maybe_account = Guardian.Plug.current_resource(conn)
 
     if maybe_account do

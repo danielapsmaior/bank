@@ -12,6 +12,15 @@ defmodule BankWeb.TransactionController do
 
   end
 
+  def transfer(conn, %{"amount" => amount, "account_number" => account_number}) do
+    account = Bank.Authentication.get_account(conn)
+
+      %{amount: amount, account_number: account_number}
+      |> Transaction.transfer(account)
+      |> result(conn)
+
+  end
+
   defp result({:ok, account, transaction}, conn),
     do: json(conn, %{success: %{balance: transaction.balance}})
 

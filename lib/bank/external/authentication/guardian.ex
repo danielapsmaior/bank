@@ -1,8 +1,6 @@
 defmodule Bank.Authentication.Guardian do
   use Guardian, otp_app: :bank
 
-  require Logger
-
   alias Bank.Domain.Account
   alias Bank.Domain.Schema.Account, as: AccountSchema
 
@@ -21,8 +19,6 @@ defmodule Bank.Authentication.Guardian do
   end
 
   def resource_from_claims(%{"sub" => id}) do
-    Logger.info("Guardian resource_from_claims #{inspect(id)}")
-
     account = Account.get_account!(id)
     {:ok, account}
   rescue
